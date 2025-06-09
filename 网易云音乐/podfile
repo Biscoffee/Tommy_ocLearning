@@ -1,0 +1,7 @@
+platform:ios,'9.0'
+
+target '网易云音乐' do
+ 
+pod 'LookinServer', :configurations => ['Debug']
+
+end

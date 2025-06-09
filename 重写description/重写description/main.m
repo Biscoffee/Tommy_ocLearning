@@ -2,16 +2,18 @@
 //  main.m
 //  重写description
 //
-//  Created by 吴桐 on 2025/5/7.
+//  Created by 吴桐 on 2025/5/19.
 //
 
 #import <Foundation/Foundation.h>
-#import "Person.h"
+#import "HUspy.h"
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        Person *p1 = [[Person alloc] initWithName:@"xuan" Age:19];
-        NSLog(@"%@,%d",p1,p1);
-        NSLog(@"%,@%d",p1.name,p1.age);
+        HUspy* p = [[HUspy alloc] init];
+        p.name = @"hi";
+        p.age = 99;
+        NSLog(@"%@ ",p);
     }
     return 0;
 }
