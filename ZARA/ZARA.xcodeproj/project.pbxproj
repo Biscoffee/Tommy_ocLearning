@@ -57,15 +57,11 @@
 		};
 		4C17A74C2DF04D9600F1D13E /* ZARATests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ZARATests;
 			sourceTree = "<group>";
 		};
 		4C17A7562DF04D9600F1D13E /* ZARAUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ZARAUITests;
 			sourceTree = "<group>";
 		};

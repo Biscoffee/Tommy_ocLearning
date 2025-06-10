@@ -12,6 +12,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     // 设置 tab 图标
     UIImage *homeIcon = [UIImage systemImageNamed:@"house"];
     UIImage *homeIconSelected = [UIImage systemImageNamed:@"house.fill"];
@@ -30,8 +31,14 @@
        verticalScrollView.contentSize = CGSizeMake(screenWidth, self.view.bounds.size.height * 7);
     [self.view addSubview:verticalScrollView];
     
+    UIImageView *logoView = [[UIImageView alloc] init];
+    logoView.frame = CGRectMake(50, 50, 100, 50);
+    UIImage *logo = [UIImage imageNamed:@"zara.png"];
+    logoView.image = logo;
+    [self.view addSubview:logoView];
+    
     // 创建滚动视图
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, bannerHeight - 120)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, bannerHeight)];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
     self.scrollView.showsHorizontalScrollIndicator = NO;
@@ -56,7 +63,7 @@
     [verticalScrollView addSubview:self.scrollView];
 
     // 添加 pageControl
-    self.page = [[UIPageControl alloc] initWithFrame:CGRectMake(0, bannerHeight - 150, screenWidth, 30)];
+    self.page = [[UIPageControl alloc] initWithFrame:CGRectMake(0, bannerHeight - 30, screenWidth, 30)];
     self.page.numberOfPages = 5;
     self.page.currentPage = 0;
     [verticalScrollView addSubview:self.page];
@@ -89,7 +96,11 @@
     
     
     CGFloat smallBannerHeight = bannerHeight * 0.5;
-    CGFloat smallBannerY = bannerHeight;
+//    CGFloat smallBannerY = bannerHeight;
+    CGFloat smallBannerY = CGRectGetMaxY(self.scrollView.frame);
+
+    // 更新 verticalScrollView 的 contentSize，确保两个滚动视图连贯显示
+//    verticalScrollView.contentSize = CGSizeMake(screenWidth, CGRectGetMaxY(self.smallScrollView.frame) + 100);
     
     
     self.smallScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, smallBannerY, screenWidth, smallBannerHeight)];

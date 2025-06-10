@@ -51,6 +51,7 @@
     [header addSubview:desc];
 
     self.tableView.tableHeaderView = header;
+    NSLog(@"navigationController: %@", self.navigationController);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

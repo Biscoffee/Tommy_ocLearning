@@ -27,13 +27,18 @@
     CGFloat height = width * 16.0 / 9.0;
     
     self.segControl = [[UISegmentedControl alloc] initWithItems:@[@"男装", @"箱包", @"女装"]];
-    self.segControl.frame = CGRectMake(20, 100, width - 40, 30);
-    self.segControl.selectedSegmentIndex = 0;
+    self.segControl.frame = CGRectMake(20, 65, width - 40, 30);
+    self.segControl.selectedSegmentIndex = 1;
+    self.segControl.backgroundColor = [UIColor systemGray6Color];
+    self.segControl.selectedSegmentTintColor = [UIColor systemBlueColor];
+    [self.segControl bringSubviewToFront:self.page];
+//    [self.segControl setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColor.blackColor} forState:UIControlStateNormal];
+//    [self.segControl setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColor.whiteColor} forState:UIControlStateSelected];
     [self.segControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.segControl];
 
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 140, width, height)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 100, width, height)];
     self.scrollView.pagingEnabled = YES;
     NSArray* photos = @[@"ph3.jpg", @"ph1.jpg", @"ph2.jpg", @"ph3.jpg", @"ph1.jpg"];
     self.scrollView.contentSize = CGSizeMake(width * photos.count, height);
@@ -73,7 +78,7 @@
 - (void)segmentChanged:(UISegmentedControl *)sender {
     CGFloat width = self.scrollView.bounds.size.width;
     NSInteger index = sender.selectedSegmentIndex;
-    [self.scrollView setContentOffset:CGPointMake(width * (index + 1), 0) animated:YES];
+    [self.scrollView setContentOffset:CGPointMake(width * index, _scrollView.contentOffset.y) animated:YES];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -90,14 +95,18 @@
     CGFloat totalWidth = scrollView.contentSize.width;
 
     if (offsetX >= totalWidth - screenWidth) {
-        [scrollView setContentOffset:CGPointMake(screenWidth, 0) animated:NO];
-        self.page.currentPage = 0;
-    } else if (offsetX <= 0) {
-        [scrollView setContentOffset:CGPointMake(totalWidth - 2 * screenWidth, 0) animated:NO];
-        self.page.currentPage = 4;
-    } else {
-        self.page.currentPage = (offsetX / screenWidth) - 1;
-    }
+            [scrollView setContentOffset:CGPointMake(screenWidth, 0) animated:NO];
+            self.page.currentPage = 0;
+            self.segControl.selectedSegmentIndex = 0; // 关键修复：重置后同步 segControl
+        } else if (offsetX <= 0) {
+            [scrollView setContentOffset:CGPointMake(totalWidth - 2 * screenWidth, 0) animated:NO];
+            self.page.currentPage = 2;
+            self.segControl.selectedSegmentIndex = 2; // 关键修复：重置后同步 segControl
+        } else {
+            NSInteger currentPage = (offsetX / screenWidth) - 1;
+            self.page.currentPage = currentPage;
+            // 此处不再更新 segControl，避免频繁变化导致冲突
+        }
 
     NSInteger index = offsetX / screenWidth + 0.5;
     if (index >= 1 && index <= 3) { // 只同步中间3页

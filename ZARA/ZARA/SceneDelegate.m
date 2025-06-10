@@ -21,29 +21,34 @@
     FirstVC* vc1 = [[FirstVC alloc] init];
     vc1.title = @"首页";
     SecondVC* vc2 = [[SecondVC alloc] init];
-    vc2.title = @"发现";
+    //vc2.title = @"发现";
     ThirdVC* vc3 = [[ThirdVC alloc] init];
     vc3.title = @"我的";
     
 //    vc1.view.backgroundColor = [UIColor whiteColor];
 //    vc2.view.backgroundColor = [UIColor whiteColor];
 //    vc3.view.backgroundColor = [UIColor whiteColor];
-    vc1.view.backgroundColor = [UIColor systemGrayColor];
-    vc2.view.backgroundColor = [UIColor systemFillColor];
+    vc1.view.backgroundColor = [UIColor whiteColor];
+    vc2.view.backgroundColor = [UIColor whiteColor];
     vc3.view.backgroundColor = [UIColor whiteColor];
 
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:vc1];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:vc2];
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:vc3];
+    NSArray *arrVC = @[nav1,vc2, nav3];
+    
     
     UITabBarController* tbc = [[UITabBarController alloc] init];
-    NSArray* arrVC = [NSArray arrayWithObjects:vc1,vc2, vc3,nil];
     tbc.viewControllers = arrVC;
+    self.window.rootViewController = tbc;
     
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
-    self.window.rootViewController = nav;
-    self.window.backgroundColor = [UIColor systemFillColor];
+   // self.window.backgroundColor = [UIColor systemFillColor];
     tbc.selectedIndex = 2;
+    tbc.tabBar.tintColor = [UIColor grayColor];
     tbc.tabBar.translucent = NO;
     tbc.tabBar.backgroundColor = [UIColor whiteColor];
     tbc.tabBar.tintColor = [UIColor blackColor];
+    tbc.tabBar.alpha = 0.8;
     
 }
 
