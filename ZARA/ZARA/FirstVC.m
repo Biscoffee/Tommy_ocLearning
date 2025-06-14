@@ -62,14 +62,15 @@
     self.scrollView.contentOffset = CGPointMake(screenWidth, 0); // 起始页
     [verticalScrollView addSubview:self.scrollView];
 
-    // 添加 pageControl
     self.page = [[UIPageControl alloc] initWithFrame:CGRectMake(0, bannerHeight - 30, screenWidth, 30)];
     self.page.numberOfPages = 5;
     self.page.currentPage = 0;
     [verticalScrollView addSubview:self.page];
     [self.page addTarget:self action:@selector(pageChanged:) forControlEvents:UIControlEventValueChanged];
-    // 启动定时器
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+ 
+    self.timer = [NSTimer timerWithTimeInterval:5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+    //如果不加 RunLoop 手动注册，自动轮播的 NSTimer 会暂停，这是因为 NSTimer 默认是加到当前 RunLoop 的 default 模式中，而你的轮播控件 UIScro11View滚动时，RunLoop 会进入 UITrackingRunLoopMode(用户交互模式)，导致 default 模式下的 timer 不会被触发，轮播就“停住”了。
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 
     // 左按钮
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -128,7 +129,8 @@
     self.smallPage.currentPage = 0;
     [verticalScrollView addSubview: self.smallPage];
     [self.smallPage addTarget:self action:@selector(smallPageChanged:) forControlEvents:UIControlEventValueChanged];
-    self.smallTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoScrollSmall) userInfo:nil repeats:YES];
+    self.smallTimer = [NSTimer timerWithTimeInterval:5 target:self selector:@selector(autoScrollSmall) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.smallTimer forMode:NSRunLoopCommonModes];
 
 }
 
@@ -160,7 +162,8 @@
     [self.smallScrollView setContentOffset:CGPointMake((page + 1) * width, 0) animated:YES];
     self.smallPage.currentPage = page;
     
-    self.smallTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoScrollSmall) userInfo:nil repeats:YES];
+    self.smallTimer = [NSTimer timerWithTimeInterval:5 target:self selector:@selector(autoScrollSmall) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.smallTimer forMode:NSRunLoopCommonModes];
 }
 
 
@@ -174,7 +177,7 @@
 
     if (btn.tag == 111) {
         if (currentPage == 0) {
-            [self.scrollView setContentOffset:CGPointMake(width * 5, 0) animated:YES];
+            [self.scrollView setContentOffset:CGPointMake(width * 5, 0) animated:NO];
             self.page.currentPage = 4;
         } else {
             currentPage--;
@@ -192,7 +195,8 @@
         }
     }
 
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+    self.timer = [NSTimer timerWithTimeInterval:5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
 
 - (void)autoScroll {
@@ -240,6 +244,7 @@
     }
 }
 
+//点击图片后实现全屏预览
 - (void)bannerTapped:(UITapGestureRecognizer *)gesture {
     UIImageView *imgView = (UIImageView *)gesture.view;
     UIImage *image = imgView.image;
